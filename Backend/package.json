@@ -1,0 +1,32 @@
+{
+  "name": "soctree",
+  "version": "1.0.0",
+  "description": "Primer proyecto con Express y TypeScript",
+  "license": "ISC",
+  "author": "Andres Felipe Florez Paternina",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon --watch src --ext ts --exec ts-node src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "colors": "^1.4.0",
+    "dotenv": "^17.4.1",
+    "express": "^5.2.1",
+    "express-validator": "^7.3.2",
+    "mongoose": "^9.4.1",
+    "slug": "^11.0.1"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.13.10",
+    "@types/slug": "^5.0.9",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.2"
+  }
+}
