@@ -8,16 +8,21 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --watch src --ext ts --exec ts-node src/index.ts",
+    "dev:api": "nodemon --watch src --ext ts --exec ts-node src/index.ts --api",
     "build": "tsc",
     "start": "node dist/index.js"
   },
   "dependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
     "bcrypt": "^6.0.0",
+    "cloudinary": "^2.9.0",
     "colors": "^1.4.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.1",
     "express": "^5.2.1",
     "express-validator": "^7.3.2",
+    "formidable": "^3.5.4",
+    "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.4.1",
     "slug": "^11.0.1"
   },
