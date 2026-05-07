@@ -24,12 +24,14 @@
     "formidable": "^3.5.4",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.4.1",
-    "slug": "^11.0.1"
+    "slug": "^11.0.1",
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.1",
+    "@types/formidable": "^3.5.1",
     "@types/node": "^22.13.10",
     "@types/slug": "^5.0.9",
     "nodemon": "^3.1.10",
