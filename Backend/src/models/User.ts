@@ -1,37 +1,47 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema, Document } from 'mongoose';
 
-interface IUser {
-    handle: string,
-    name: string,
-    email: string,
-    password: string,
-    lowercase: true,
-    unique: true,
-};
+export interface IUser extends Document {
+  handle: string,
+  name: string,
+  email: string,
+  password: string,
+  lowercase: true,
+  unique: true,
+  description: string,
+  image: string,
+}
 
 const userSchema = new Schema({
   handle: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   name: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   email: {
     type: String,
     required: true,
     trim: true,
     unique: true,
-    lowercase: true
+    lowercase: true,
   },
   password: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
+  description: {
+    type: String,
+    default: ''
+  },
+  image: {
+    type: String,
+    default: ''
+  }
 });
 
 const User = mongoose.model<IUser>('User', userSchema);
