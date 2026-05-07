@@ -11,19 +11,23 @@ export default function LinkTreeView() {
   const queryClient = useQueryClient();
   const user = queryClient.getQueryData<User>(['user']);
   const [devTreeLinks, setDevTreeLinks] = useState<DevTreeLink[]>(() => {
-    if (!user) return social;
+    if (!user || !user.links) return social;
 
-    return social.map((item) => {
-      const userLink = (JSON.parse(user.links) as SocialNetwork[]).find(
-        (link) => link.name === item.name,
-      );
+    try {
+      return social.map((item) => {
+        const userLink = (JSON.parse(user.links) as SocialNetwork[]).find(
+          (link) => link.name === item.name,
+        );
 
-      if (userLink) {
-        return { ...item, url: userLink.url, enabled: userLink.enabled };
-      }
+        if (userLink) {
+          return { ...item, url: userLink.url, enabled: userLink.enabled };
+        }
 
-      return item;
-    });
+        return item;
+      });
+    } catch {
+      return social;
+    }
   });
   const { mutate } = useMutation({
     mutationFn: updateProfile,
@@ -40,14 +44,15 @@ export default function LinkTreeView() {
       link.name === e.target.name ? { ...link, url: e.target.value } : link,
     );
     setDevTreeLinks(updatedLinks);
-
-    queryClient.setQueryData(['user'], (prevData: User) => {
-      return {
-        ...prevData,
-        links: JSON.stringify(updatedLinks),
-      };
-    });
   };
+
+  let links: SocialNetwork[] = [];
+  try {
+    links = JSON.parse(user?.links ?? '[]');
+  } catch (error) {
+    console.error('Error al parsear user.links:', user?.links, error);
+    links = [];
+  }
 
   const handleEnableLink = (socialNetwork: string) => {
     const updatedLinks = devTreeLinks.map((link) => {
@@ -62,10 +67,55 @@ export default function LinkTreeView() {
     });
     setDevTreeLinks(updatedLinks);
 
+    let updatedItems: SocialNetwork[] = [];
+    const selectedSocialNetwork = updatedLinks.find(
+      (link) => link.name === socialNetwork,
+    );
+    if (selectedSocialNetwork?.enabled) {
+      const id = links.filter(link => link.id).length + 1
+      if (links.some(link => link.name === socialNetwork)) {
+        updatedItems = links.map(link => {
+          if(link.name === socialNetwork) {
+            return {
+              ...link,
+              enabled: true,
+              id
+            }
+          } else {
+            return link
+          }
+        })
+      } else {
+        const newItem = {
+          ...selectedSocialNetwork,
+          id,
+        };
+      updatedItems = [...links, newItem];
+      }
+    } else {
+      const indexToUpdate = links.findIndex(link => link.name === socialNetwork)
+      updatedItems = links.map(link => {
+        if(link.name === socialNetwork) {
+          return {
+            ...link,
+            id: 0,
+            enabled: false
+          }
+        } else if(link.id > indexToUpdate) {
+          return {
+            ...link,
+            id: link.id - 1
+          }
+        } else {
+          return link
+        }
+      })
+    }
+
     queryClient.setQueryData(['user'], (prevData: User) => {
       return {
         ...prevData,
-        links: JSON.stringify(updatedLinks),
+        links: JSON.stringify(updatedItems),
       };
     });
   };
