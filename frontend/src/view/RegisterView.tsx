@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { isAxiosError } from 'axios';
 import { toast } from 'sonner';
 import type { RegisterForm } from '../types';
@@ -17,20 +17,20 @@ export const RegisterView = () => {
 
   const {
     register,
-    watch,
+    control,
     reset,
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterForm>({ defaultValues: initialValues });
 
-  const password = watch('password');
+  const password = useWatch({
+    control,
+    name: 'password',
+  });
 
   const handleRegister = async (formData: RegisterForm) => {
     try {
-      const { data } = await api.post(
-        `/auth/register`,
-        formData,
-      );
+      const { data } = await api.post(`/auth/register`, formData);
       toast.success(data.message);
       reset();
     } catch (error) {

@@ -7,16 +7,18 @@ import { updateProfile, uploadImage } from '../api/SocTreeAPI';
 
 export default function ProfileView() {
   const queryClient = useQueryClient();
-  const data: User = queryClient.getQueryData(['user'])!
-  
+  const data = queryClient.getQueryData<User>(['user']);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ProfileForm>({ defaultValues: {
-      handle: data.handle,
-      description: data.description
-  } });
+  } = useForm<ProfileForm>({
+    defaultValues: {
+      handle: data?.handle ?? '',
+      description: data?.description ?? '',
+    },
+  });
 
   const updateProfileMutation = useMutation({
     mutationFn: updateProfile,
@@ -25,37 +27,48 @@ export default function ProfileView() {
     },
     onSuccess: (data) => {
       toast.success(data);
-      queryClient.invalidateQueries({queryKey: ['user']})
-    }
-  })
+      queryClient.invalidateQueries({ queryKey: ['user'] });
+    },
+  });
 
-    const uploadImageMutation = useMutation({
+  const uploadImageMutation = useMutation({
     mutationFn: uploadImage,
     onError: (error) => {
-      toast.error(error.message)
+      toast.error(error.message);
     },
     onSuccess: (data) => {
       queryClient.setQueryData(['user'], (prevData: User) => {
         return {
           ...prevData,
-          image: data
-        }
-      })
-    }
-  })
+          image: data,
+        };
+      });
+    },
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       uploadImageMutation.mutate(e.target.files[0]);
     }
-  }
+  };
 
   const handleUserProfileForm = (formData: ProfileForm) => {
-    updateProfileMutation.mutate(formData)
+    const user = queryClient.getQueryData<User>(['user']);
+    if (!user) return;
+    user.description = formData.description;
+    user.handle = formData.handle;
+    updateProfileMutation.mutate(user);
+  };
+
+  if (!data) {
+    return null;
   }
 
   return (
-    <form className="bg-white p-10 rounded-lg space-y-5" onSubmit={handleSubmit(handleUserProfileForm)}>
+    <form
+      className="bg-white p-10 rounded-lg space-y-5"
+      onSubmit={handleSubmit(handleUserProfileForm)}
+    >
       <legend className="text-2xl text-slate-800 text-center">
         Editar Información
       </legend>
@@ -66,7 +79,7 @@ export default function ProfileView() {
           className="border-none bg-slate-100 rounded-lg p-2"
           placeholder="handle o Nombre de Usuario"
           {...register('handle', {
-            required: 'El Nombre de Usuario es Obligatorio'
+            required: 'El Nombre de Usuario es Obligatorio',
           })}
         />
         {errors.handle && <ErrorMessage>{errors.handle.message}</ErrorMessage>}
@@ -78,10 +91,12 @@ export default function ProfileView() {
           className="border-none bg-slate-100 rounded-lg p-2"
           placeholder="Tu Descripción"
           {...register('description', {
-            required: 'La descripcion es obligatoria'
+            required: 'La descripcion es obligatoria',
           })}
         />
-        {errors.description && <ErrorMessage>{errors.description.message}</ErrorMessage>}
+        {errors.description && (
+          <ErrorMessage>{errors.description.message}</ErrorMessage>
+        )}
       </div>
 
       <div className="grid grid-cols-1 gap-2">

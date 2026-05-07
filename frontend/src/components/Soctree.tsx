@@ -1,13 +1,16 @@
 import { Toaster } from 'sonner';
 import NavigationTabs from './NavigationTabs';
 import { Link, Outlet } from 'react-router-dom';
-import type { User } from '../types';
+import type { SocialNetwork, User } from '../types';
+import DevTreeLink from './DevTreeLink';
 
 type SocTreeProps = {
     data: User
 }
 
 export default function Soctree({data}: SocTreeProps) {
+  const enabledLinks = (JSON.parse(data.links) as SocialNetwork[]).filter((item: SocialNetwork) => item.enabled)
+
   return (
     <>
       <header className="bg-slate-800 py-5">
@@ -51,6 +54,11 @@ export default function Soctree({data}: SocTreeProps) {
               }
 
               <p className='text-center text-lg font-black text-white'>{data.description}</p>
+              <div className='mt-20 flex flex-col gap-5'>
+                {enabledLinks.map(link => (
+                  <DevTreeLink key={link.name} link={link}/>
+                ))}
+              </div>
             </div>
           </div>
         </main>
