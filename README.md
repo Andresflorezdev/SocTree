@@ -1,8 +1,8 @@
-# SocTree
+# 🌳 SocTree
 
 A full-stack "linktree" or "bio link" web application that allows users to create profiles with links to their social media networks.
 
-## Architecture
+## 🏗️ Architecture
 
 ### Backend
 - **Framework**: Express + TypeScript
@@ -23,7 +23,7 @@ A full-stack "linktree" or "bio link" web application that allows users to creat
 - **Forms**: react-hook-form
 - **HTTP Client**: axios
 
-## Features
+## ✨ Features
 
 - **User Authentication**: Registration and login with email and password
 - **User Profiles**: 
@@ -34,7 +34,7 @@ A full-stack "linktree" or "bio link" web application that allows users to creat
 - **Search**: Find users by handle
 - **Image Management**: Upload and store profile images via Cloudinary
 
-## User Model
+## 👤 User Model
 
 ```typescript
 {
@@ -48,7 +48,7 @@ A full-stack "linktree" or "bio link" web application that allows users to creat
 }
 ```
 
-## API Endpoints
+## 🔗 API Endpoints
 
 - `POST /auth/register` - Create new user account
 - `POST /auth/login` - User login
@@ -58,7 +58,7 @@ A full-stack "linktree" or "bio link" web application that allows users to creat
 - `GET /:handle` - Get user by handle
 - `POST /search` - Search users by handle
 
-## Getting Started
+## 🚀 Getting Started
 
 ### Backend
 ```bash
@@ -74,6 +74,6 @@ npm install
 npm run dev
 ```
 
-## Author
+## 👨‍💻 Author
 
 Andres Felipe Florez Paternina
