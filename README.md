@@ -32,7 +32,7 @@ A full-stack "linktree" or "bio link" web application that allows users to creat
   - Profile image upload
   - Manageable links (stored as JSON)
 - **Search**: Find users by handle
-- **Image Management**: Upload and store profile images via Cloudinary
+- **Image Management**: Upload and store profile images via Cloudinary 
 
 ## 👤 User Model
 
